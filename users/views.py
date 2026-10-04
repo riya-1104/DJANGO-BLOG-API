@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import UserRegistrationSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class UserRegistrationView(APIView):
 
@@ -20,3 +21,14 @@ class UserRegistrationView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+        
+        
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            "username": request.user.username,
+            "email": request.user.email,
+            "role": request.user.role
+        })
